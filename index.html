@@ -64,12 +64,12 @@ const starter={
  }]}]};
 let data=load(); let campaignId=null, characterId=null, activeTab='sheet', modalAction=null;
 function migrateData(){
-if(!Array.isArray(data.campaigns))data.campaigns=[];
-const starterCampaign=starter.campaigns.find(c=>c.id==='odysee');
+if(!data||!Array.isArray(data.campaigns))data={campaigns:[]};
+const starterCampaign=JSON.parse(JSON.stringify(starter.campaigns.find(c=>c.id==='odysee')));
 let savedCampaign=data.campaigns.find(c=>c.id==='odysee');
-if(!savedCampaign){data.campaigns.unshift(structuredClone(starterCampaign));savedCampaign=data.campaigns[0];}
+if(!savedCampaign){data.campaigns.unshift(starterCampaign);savedCampaign=data.campaigns[0];}
 if(!Array.isArray(savedCampaign.characters))savedCampaign.characters=[];
-if(!savedCampaign.characters.some(ch=>ch.id==='therkos'))savedCampaign.characters.unshift(structuredClone(starterCampaign.characters.find(ch=>ch.id==='therkos')));
+if(!savedCampaign.characters.some(ch=>ch.id==='therkos'))savedCampaign.characters.unshift(JSON.parse(JSON.stringify(starterCampaign.characters.find(ch=>ch.id==='therkos'))));
 (data.campaigns||[]).forEach(c=>(c.characters||[]).forEach(ch=>{ch.tempHp=ch.tempHp??0;ch.arrows=ch.arrows??20;ch.maxArrows=ch.maxArrows??20;ch.money=ch.money||{po:0,pa:0,pc:0};ch.treasures=ch.treasures||'';ch.treasureCount=ch.treasureCount??0;ch.slots1=ch.slots1??(ch.level>=3?4:3);ch.slot1Total=ch.slot1Total??(ch.level>=3?4:3);ch.slots2=ch.slots2??(ch.level>=3?2:0);ch.slot2Total=ch.slot2Total??(ch.level>=3?2:0);ch.channelUses=ch.channelUses??2;ch.channelMax=ch.channelMax??2;ch.reputation=ch.reputation??1;ch.heroic=ch.heroic??false;ch.preparedSpellCount=ch.preparedSpellCount??(ch.level>=3?6:5);if(ch.id==='therkos'&&ch.level<3){ch.level=3;ch.slots1=4;ch.slot1Total=4;ch.slots2=2;ch.slot2Total=2;ch.channelUses=2;ch.channelMax=2;ch.preparedSpellCount=6;ch.domain=ch.domain||'Domaine de Lumière envisagé — à valider avec le MJ';}
 ch.hitDiceTotal=ch.hitDiceTotal??Math.max(1,ch.level||2);ch.hitDiceAvailable=ch.hitDiceAvailable??ch.hitDiceTotal;ch.lastRest=ch.lastRest||'';}));}
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||structuredClone(starter)}catch(e){return JSON.parse(JSON.stringify(starter))}}
