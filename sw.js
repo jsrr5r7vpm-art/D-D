@@ -1,5 +1,5 @@
-const CACHE='therkos-grimoire-art-v14';
-const CORE=['./','./index.html','./manifest.webmanifest'];
+const CACHE='therkos-grimoire-spellbook-v19';
+const CORE=['./','./index.html','./manifest.webmanifest','./spell-art/thaumaturgy.jpg','./spell-art/guidance.jpg','./spell-art/sacred-flame.jpg','./spell-art/minor-illusion.jpg','./spell-art/spare-dying.jpg','./spell-art/bless.jpg','./spell-art/detect-magic.jpg','./spell-art/sanctuary.jpg','./spell-art/healing-word.jpg','./spell-art/cure-wounds.jpg','./spell-art/divine-spark.jpg','./spell-art/turn-undead.jpg','./spell-art/command.jpg','./spell-art/scorching-ray.jpg','./spell-art/faerie-fire.jpg','./spell-art/burning-hands.jpg','./spell-art/see-invisibility.jpg','./spell-art/spiritual-weapon.jpg','./spell-art/sleep-satyr.jpg'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;e.respondWith(fetch(e.request).then(r=>{if(r&&r.ok){const cp=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cp))}return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))))});
